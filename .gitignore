@@ -1,0 +1,18 @@
+# XAMPP / PHP
+.env
+vendor/
+node_modules/
+.idea/
+.vscode/
+*.log
+*.sql
+*.sqlite
+.DS_Store
+uploads/
+*.bak
+
+# Composer
+composer.lock
+
+# OS files
+Thumbs.db

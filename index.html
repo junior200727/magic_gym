@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Magic Gym - Academia de Ginástica</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600;700&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        :root {
+            --purple-1: #5b1a8d;
+            --purple-2: #7c2bbf;
+            --accent: #ffd700;
+            --bg1: #e0d4f7;
+            --bg2: #f6f0fa;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--bg1), var(--bg2));
+            color: #3a1a68;
+            overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        header h1 {
+            margin: 0;
+            font-family: 'Great Vibes', cursive;
+            font-size: 42px;
+            text-shadow: 0 0 8px var(--accent);
+            animation: brilho 2s infinite alternate;
+        }
+
+        /* NAV FICA OCULTO ATÉ LOGIN */
+        header nav {
+            display: none;
+        }
+
+        nav a,
+        nav button {
+            color: var(--accent);
+            text-decoration: none;
+            margin-left: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            font-size: 18px;
+            background: none;
+            border: none;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            background: var(--accent);
+            left: 0;
+            bottom: -6px;
+            transition: 0.4s;
+        }
+
+        nav a:hover,
+        nav button:hover {
+            color: white;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        .active {
+            display: block;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--purple-2);
+            font-size: 36px;
+            position: relative;
+            font-family: 'Great Vibes', cursive;
+        }
+
+        h2::after {
+            content: '✨';
+            position: absolute;
+            right: -30px;
+            animation: girar 2s linear infinite;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: var(--purple-1);
+            font-weight: 600;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+            font-size: 16px;
+        }
+
+        button.primary {
+            margin-top: 20px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--purple-2), var(--purple-1));
+            color: white;
+            padding: 12px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: bold;
+            transition: background 0.3s, transform .14s ease;
+            font-size: 18px;
+        }
+
+        button.primary:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+        }
+
+        .modalidade {
+            margin-bottom: 30px;
+            background-color: #f8f3ff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(124, 43, 191, 0.12);
+        }
+
+        .modalidade h3 {
+            color: var(--purple-1);
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .modalidade p {
+            margin: 6px 0;
+        }
+
+        .btn-matricular {
+            margin-top: 12px;
+            background: linear-gradient(90deg, #8e44ad, #9b59b6);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            transition: transform .12s ease, box-shadow .12s ease;
+            box-shadow: 0 8px 22px rgba(124, 43, 191, 0.12);
+        }
+
+        .btn-matricular:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(124, 43, 191, 0.18);
+        }
+
+        footer {
+            background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 40px;
+            border-top: 3px solid var(--accent);
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Animações */
+        @keyframes brilho {
+            from {
+                text-shadow: 0 0 10px var(--accent);
+            }
+
+            to {
+                text-shadow: 0 0 20px var(--accent), 0 0 30px var(--accent);
+            }
+        }
+
+        @keyframes girar {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== TELA DE LOGIN BLOQUEADORA (MAGICA: ROXO/LILÁS) ===== */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 10%, rgba(203, 132, 239, 0.12), transparent 15%),
+                linear-gradient(135deg, #6b1fb3 0%, #c79ff2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            animation: fadeIn 0.6s ease;
+        }
+
+        /* QUADRADO BRANCO AO REDOR DO LOGIN */
+        #loginBox {
+            background: #ffffff;
+            padding: 36px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(91, 26, 141, 0.18);
+            width: 360px;
+            color: #3a1a68;
+            /* texto em roxo escuro */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* pequeno ornamento mágico */
+        #loginBox::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -60px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(199, 159, 242, 0.25), transparent 40%);
+            transform: rotate(25deg);
+        }
+
+        #loginBox h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 34px;
+            color: var(--purple-2);
+            margin: 0 0 16px 0;
+        }
+
+        .field-pass {
+            position: relative;
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #8761a8;
+        }
+
+        #loginBox input::placeholder {
+            color: #9b86b6;
+        }
+
+        #loginError {
+            color: #c72121;
+            font-weight: 700;
+            display: none;
+            margin-top: 10px;
+            animation: tremer 0.36s ease;
+        }
+
+        #loginSuccess {
+            color: #0a7a3d;
+            font-weight: 700;
+            display: none;
+            margin-top: 10px;
+        }
+
+        @keyframes tremer {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-6px);
+            }
+
+            50% {
+                transform: translateX(6px);
+            }
+
+            75% {
+                transform: translateX(-6px);
+            }
+        }
+
+        /* para que o overlay bloqueie tudo até o login */
+        .hidden {
+            display: none !important;
+        }
+
+        /* responsividade */
+        @media (max-width: 600px) {
+            #loginBox {
+                width: 92%;
+                padding: 22px;
+            }
+
+            header h1 {
+                font-size: 32px;
+            }
+
+            .container {
+                margin: 20px 16px;
+                padding: 20px;
+                border-radius: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TELA DE LOGIN (bloqueadora) -->
+    <div id="loginOverlay" aria-hidden="false">
+        <div id="loginBox" role="dialog" aria-labelledby="loginTitle" aria-modal="true">
+            <h2 id="loginTitle">✨ Acesso Mágico ✨</h2>
+            <label for="usuarioEmail"
+                style="display:block; text-align:left; color:#5b1a8d; font-weight:600; margin-bottom:6px;">E-mail</label>
+            <input type="email" id="usuarioEmail" placeholder="seu@email.com" aria-label="E-mail" />
+
+            <label for="usuarioSenha"
+                style="display:block; text-align:left; color:#5b1a8d; font-weight:600; margin-top:12px; margin-bottom:6px;">Senha</label>
+            <div class="field-pass" style="margin-bottom:6px;">
+                <input type="password" id="usuarioSenha" placeholder="Senha" aria-label="Senha" />
+                <button class="eye-btn" id="toggleLoginEye" aria-label="Mostrar senha">👁</button>
+            </div>
+
+            <button class="primary" onclick="loginUser()">Entrar</button>
+
+            <p id="loginError">E-mail ou senha incorretos!</p>
+            <p id="loginSuccess">Login efetuado com sucesso! Carregando...</p>
+
+            <p class="link-muted" style="color:#7c2bbf; font-weight:600; margin-top:10px; cursor:pointer;"
+                onclick="abrirCadastroDesdeOverlay()">Não tem uma conta? Cadastre-se</p>
+        </div>
+    </div>
+
+    <header>
+        <h1>Magic Gym</h1>
+        <nav aria-label="Menu principal">
+            <a onclick="mostrarPagina('inicio')">Início</a>
+            <a onclick="mostrarPagina('matricula')">Matrícula</a>
+            <a onclick="mostrarPagina('modalidades')">Modalidades</a>
+            <a onclick="mostrarPagina('contato')">Contato</a>
+            <button id="logoutBtn"
+                style="display:none; background:none; border:none; color:var(--accent); font-weight:700;"
+                onclick="logout()">Sair</button>
+        </nav>
+    </header>
+
+
+    <div id="inicio" class="container active">
+        <img src="magic-gym.jpg" alt="Logo Magic Gym"
+            style="max-width: 300px; display: block; margin: 0 auto 30px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" />
+        <h2>✨ Bem-vindo à Magic Gym ✨</h2>
+        <p>💫 Descubra um universo onde saúde e magia se encontram! Somos a <strong>Magic Gym</strong>, uma academia
+            feita para transformar sua vida e sua energia.</p>
+        <p>🏰 Venha viver essa experiência única! Nossa missão é trazer bem-estar, força e vitalidade com um toque de
+            magia!</p>
+    </div>
+
+    <!-- Página de Matrícula -->
+    <div id="matricula" class="container">
+        <h2>Formulário de Matrícula</h2>
+        <form id="matForm" onsubmit="event.preventDefault(); enviarMatricula();">
+            <label>Nome:</label>
+            <input type="text" id="matNome" required />
+
+            <label>CPF:</label>
+            <input type="text" id="matCpf" required />
+
+            <label>E-mail:</label>
+            <input type="email" id="matEmail" required />
+
+            <label>Modalidade:</label>
+            <select id="matModalidade" required>
+                <option value="">Selecione</option>
+                <option>Ginástica Artística Masculina</option>
+                <option>Ginástica Artística Feminina</option>
+                <option>Ginástica Rítmica</option>
+                <option>Ginástica Acrobática</option>
+                <option>Ginástica Aeróbica</option>
+                <option>Ginástica para a Terceira Idade</option>
+            </select>
+
+            <label>Horário:</label>
+            <select id="matHorario" required>
+                <option value="">Selecione</option>
+                <option>08h às 09h</option>
+                <option>09h às 10h</option>
+                <option>10h às 11h</option>
+                <option>14h às 15h</option>
+                <option>16h às 17h</option>
+                <option>18h às 19h</option>
+                <option>19h às 20h</option>
+            </select>
+
+            <p id="matError" style="display:none;color:#c72121;font-weight:700;margin-top:10px;"></p>
+            <button class="primary" type="submit">Enviar Matrícula</button>
+        </form>
+    </div>
+
+    <!-- Página de Modalidades -->
+    <div id="modalidades" class="container">
+        <h2>Modalidades Ofertadas</h2>
+
+        <div class="modalidade">
+            <h3>Ginástica Artística Masculina</h3>
+            <p>Desenvolve força, flexibilidade e disciplina em aparelhos como argolas, cavalo e barra.</p>
+            <p><strong>Professor:</strong> Guilherme Sales</p>
+            <p><strong>Horários:</strong> 08h às 09h, 14h às 15h, 18h às 19h</p>
+            <button class="btn-matricular"
+                onclick="selecionarModalidade('Ginástica Artística Masculina')">Matricule-se</button>
+        </div>
+
+        <div class="modalidade">
+            <h3>Ginástica Artística Feminina</h3>
+            <p>Foca em equilíbrio, força e elegância, utilizando trave, solo e barras assimétricas.</p>
+            <p><strong>Professora:</strong> Sabrina Neris</p>
+            <p><strong>Horários:</strong> 09h às 10h, 16h às 17h, 19h às 20h</p>
+            <button class="btn-matricular"
+                onclick="selecionarModalidade('Ginástica Artística Feminina')">Matricule-se</button>
+        </div>
+
+        <div class="modalidade">
+            <h3>Ginástica Rítmica</h3>
+            <p>Combina dança, música e aparelhos como fitas, arcos e bolas.</p>
+            <p><strong>Professora:</strong> Vanessa Chaves</p>
+            <p><strong>Horários:</strong> 08h às 09h, 14h às 15h, 18h às 19h</p>
+            <button class="btn-matricular" onclick="selecionarModalidade('Ginástica Rítmica')">Matricule-se</button>
+        </div>
+
+        <div class="modalidade">
+            <h3>Ginástica Acrobática</h3>
+            <p>Envolve acrobacias em grupo, equilíbrio e confiança entre os participantes.</p>
+            <p><strong>Professor:</strong> Sophia Loren</p>
+            <p><strong>Horários:</strong> 10h às 11h, 16h às 17h, 19h às 20h</p>
+            <button class="btn-matricular" onclick="selecionarModalidade('Ginástica Acrobática')">Matricule-se</button>
+        </div>
+
+        <div class="modalidade">
+            <h3>Ginástica Aeróbica</h3>
+            <p>Alta intensidade com movimentos rápidos e sequências coreografadas.</p>
+            <p><strong>Professora:</strong> Thaemely Vitória</p>
+            <p><strong>Horários:</strong> 09h às 10h, 14h às 15h, 18h às 19h</p>
+            <button class="btn-matricular" onclick="selecionarModalidade('Ginástica Aeróbica')">Matricule-se</button>
+        </div>
+
+        <div class="modalidade">
+            <h3>Ginástica para a Terceira Idade</h3>
+            <p>Foco em bem-estar, alongamento, equilíbrio e fortalecimento para a saúde e autonomia dos idosos.</p>
+            <p><strong>Professora:</strong> Maria Clara</p>
+            <p><strong>Horários:</strong> 08h às 09h, 14h às 15h, 16h às 17h</p>
+            <button class="btn-matricular"
+                onclick="selecionarModalidade('Ginástica para a Terceira Idade')">Matricule-se</button>
+        </div>
+    </div>
+
+    <!-- Página de Contato -->
+    <div id="contato" class="container">
+        <h2>Fale Conosco</h2>
+        <p><strong>Telefone:</strong> (11) 99999-9999</p>
+        <p><strong>WhatsApp:</strong> (11) 98888-8888</p>
+        <p><strong>Instagram:</strong> <a href="#" target="_blank">@magicgym</a></p>
+        <p><strong>E-mail:</strong> contato@magicgym.com</p>
+    </div>
+
+    <!-- Página de Cadastro (permanece para quem quiser criar) -->
+    <div id="cadastro" class="container">
+        <h2>Cadastro</h2>
+        <form id="regForm" onsubmit="event.preventDefault(); registrarUsuario();">
+            <label>Nome Completo:</label>
+            <input type="text" id="regNome" required />
+
+            <label>E-mail:</label>
+            <input type="email" id="regEmail" required />
+
+            <label>Senha:</label>
+            <div class="field-pass">
+                <input type="password" id="regSenha" required />
+                <button class="eye-btn" id="toggleRegEye" aria-label="Mostrar senha">👁</button>
+            </div>
+
+            <label>Confirmar Senha:</label>
+            <input type="password" id="regSenhaConfirm" required />
+
+            <p id="regError" style="display:none;color:#c72121;font-weight:700;margin-top:10px;"></p>
+            <p id="regSuccess" style="display:none;color:#0a7a3d;font-weight:700;margin-top:10px;"></p>
+
+            <button class="primary" type="submit">Cadastrar</button>
+        </form>
+        <p class="link-muted" style="color:#7c2bbf; font-weight:600; margin-top:10px; cursor:pointer;"
+            onclick="voltarParaLogin()">Já tem uma conta? Faça login</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Magic Gym - Todos os direitos reservados. ✨</p>
+    </footer>
+
+    <script>
+        // --- Variáveis Globais de Estado ---
+        let currentUserEmail = null;
+        let isUserLogged = false;
+
+        // --- Funções Auxiliares de API ---
+
+        // Verifica no servidor se há sessão ativa ao carregar a página
+        async function checkSession() {
+            try {
+                const res = await fetch('status.php');
+                const data = await res.json();
+
+                if (data.logged) {
+                    isUserLogged = true;
+                    currentUserEmail = data.email;
+                    updateUIState(true);
+                } else {
+                    isUserLogged = false;
+                    currentUserEmail = null;
+                    updateUIState(false);
+                }
+            } catch (e) {
+                console.error("Erro ao verificar sessão:", e);
+            }
+        }
+
+        // Atualiza a interface (Menu, Overlay, Inputs)
+        function updateUIState(logged) {
+            const nav = document.querySelector('header nav');
+            const overlay = document.getElementById('loginOverlay');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const matEmail = document.getElementById('matEmail');
+
+            if (logged) {
+                // Usuário Logado
+                nav.style.display = 'flex';
+                logoutBtn.style.display = 'inline-block';
+
+                // Esconde overlay de login
+                overlay.style.display = 'none';
+                overlay.setAttribute('aria-hidden', 'true');
+
+                // Preenche email na matrícula
+                if (matEmail) matEmail.value = currentUserEmail;
+
+            } else {
+                // Usuário Não Logado
+                nav.style.display = 'none';
+                logoutBtn.style.display = 'none';
+
+                // Se não estivermos na tela de cadastro, mostra o login
+                const currentContainer = document.querySelector('.container.active')?.id;
+                if (currentContainer !== 'cadastro') {
+                    overlay.style.display = 'flex';
+                    overlay.setAttribute('aria-hidden', 'false');
+                } else {
+                    overlay.style.display = 'none';
+                }
+            }
+        }
+
+        // --- Inicialização ---
+        document.addEventListener('DOMContentLoaded', () => {
+            checkSession(); // Verifica sessão PHP
+
+            // Verificar seleção pendente de modalidade
+            const pending = localStorage.getItem('mg_selected_modality');
+            if (pending) {
+                const sel = document.getElementById('matModalidade');
+                if (sel) sel.value = pending;
+            }
+
+            // Listeners dos olhos de senha
+            setupEyeToggles();
+        });
+
+        function setupEyeToggles() {
+            const toggleLogin = document.getElementById('toggleLoginEye');
+            if (toggleLogin) {
+                toggleLogin.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const pass = document.getElementById('usuarioSenha');
+                    togglePasswordVisibility(pass, this);
+                });
+            }
+
+            const toggleReg = document.getElementById('toggleRegEye');
+            if (toggleReg) {
+                toggleReg.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const pass = document.getElementById('regSenha');
+                    togglePasswordVisibility(pass, this);
+                });
+            }
+        }
+
+        function togglePasswordVisibility(input, btn) {
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '🙈';
+                btn.setAttribute('aria-label', 'Ocultar senha');
+            } else {
+                input.type = 'password';
+                btn.textContent = '👁';
+                btn.setAttribute('aria-label', 'Mostrar senha');
+            }
+        }
+
+        // --- Navegação ---
+        function mostrarPagina(pagina) {
+            const paginas = ['inicio', 'matricula', 'modalidades', 'contato', 'cadastro'];
+            paginas.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('active');
+            });
+            const target = document.getElementById(pagina);
+            if (target) target.classList.add('active');
+
+            // Lógica de Overlay
+            const overlay = document.getElementById('loginOverlay');
+
+            if (!isUserLogged && pagina !== 'cadastro') {
+                overlay.style.display = 'flex';
+                overlay.setAttribute('aria-hidden', 'false');
+            } else {
+                overlay.style.display = 'none';
+                overlay.setAttribute('aria-hidden', 'true');
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        // --- Login (AJAX PHP) ---
+        async function loginUser() {
+            const email = document.getElementById('usuarioEmail').value.trim();
+            const senha = document.getElementById('usuarioSenha').value;
+            const err = document.getElementById('loginError');
+            const ok = document.getElementById('loginSuccess');
+
+            err.style.display = 'none'; ok.style.display = 'none';
+
+            if (!email || !senha) {
+                err.textContent = 'Preencha e-mail e senha.';
+                err.style.display = 'block';
+                return;
+            }
+
+            try {
+                const res = await fetch('login.php', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, senha }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    isUserLogged = true;
+                    currentUserEmail = data.email;
+                    ok.textContent = 'Login efetuado com sucesso!';
+                    ok.style.display = 'block';
+
+                    updateUIState(true);
+
+                    setTimeout(() => {
+                        mostrarPagina('inicio');
+                        // Limpa campos
+                        document.getElementById('usuarioEmail').value = '';
+                        document.getElementById('usuarioSenha').value = '';
+                        ok.style.display = 'none';
+                    }, 700);
+                } else {
+                    err.textContent = data.message || 'Erro no login.';
+                    err.style.display = 'block';
+                }
+            } catch (e) {
+                err.textContent = 'Erro de conexão com o servidor.';
+                err.style.display = 'block';
+            }
+        }
+
+        // --- Cadastro (AJAX PHP) ---
+        async function registrarUsuario() {
+            const nome = document.getElementById('regNome').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const senha = document.getElementById('regSenha').value;
+            const senhaConfirm = document.getElementById('regSenhaConfirm').value;
+            const err = document.getElementById('regError');
+            const ok = document.getElementById('regSuccess');
+
+            err.style.display = 'none'; ok.style.display = 'none';
+
+            if (!nome || !email || !senha || !senhaConfirm) {
+                err.textContent = 'Preencha todos os campos.';
+                err.style.display = 'block'; return;
+            }
+            if (senha.length < 6) {
+                err.textContent = 'Senha precisa ter ao menos 6 caracteres.';
+                err.style.display = 'block'; return;
+            }
+            if (senha !== senhaConfirm) {
+                err.textContent = 'As senhas não coincidem.';
+                err.style.display = 'block'; return;
+            }
+
+            try {
+                const res = await fetch('register.php', {
+                    method: 'POST',
+                    body: JSON.stringify({ nome, email, senha }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    ok.textContent = 'Cadastro realizado! Entrando...';
+                    ok.style.display = 'block';
+
+                    // Atualiza estado local após cadastro bem sucedido (o PHP já cria a sessão)
+                    isUserLogged = true;
+                    currentUserEmail = email;
+
+                    setTimeout(() => {
+                        updateUIState(true);
+                        mostrarPagina('inicio');
+                    }, 900);
+                } else {
+                    err.textContent = data.message || 'Erro ao cadastrar.';
+                    err.style.display = 'block';
+                }
+            } catch (e) {
+                err.textContent = 'Erro de conexão.';
+                err.style.display = 'block';
+            }
+        }
+
+        // --- Matrícula (AJAX PHP) ---
+        async function enviarMatricula() {
+            const nome = document.getElementById('matNome').value.trim();
+            const cpf = document.getElementById('matCpf').value.trim();
+            const email = document.getElementById('matEmail').value.trim();
+            const modalidade = document.getElementById('matModalidade').value;
+            const horario = document.getElementById('matHorario').value;
+            const err = document.getElementById('matError');
+
+            err.style.display = 'none';
+
+            if (!nome || !cpf || !email || !modalidade || !horario) {
+                err.textContent = 'Preencha todos os campos.';
+                err.style.display = 'block';
+                return;
+            }
+
+            try {
+                const res = await fetch('enroll.php', {
+                    method: 'POST',
+                    body: JSON.stringify({ nome, cpf, email, modalidade, horario }),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    alert('Matrícula enviada com sucesso! ✨');
+                    localStorage.removeItem('mg_selected_modality');
+                    mostrarPagina('inicio');
+                    // Limpar form
+                    document.getElementById('matForm').reset();
+                    // Repor email se logado
+                    if (isUserLogged) document.getElementById('matEmail').value = currentUserEmail;
+                } else {
+                    err.textContent = data.message || 'Erro ao enviar matrícula.';
+                    err.style.display = 'block';
+                }
+            } catch (e) {
+                err.textContent = 'Erro de conexão.';
+                err.style.display = 'block';
+            }
+        }
+
+        // --- Logout ---
+        async function logout() {
+            await fetch('logout.php');
+            isUserLogged = false;
+            currentUserEmail = null;
+            updateUIState(false);
+            mostrarPagina('inicio');
+        }
+
+        // --- Funções de Interface ---
+        function abrirCadastroDesdeOverlay() {
+            document.getElementById('loginOverlay').style.display = 'none';
+            mostrarPagina('cadastro');
+        }
+
+        function voltarParaLogin() {
+            mostrarPagina('inicio');
+            // A lógica de mostrarPagina já vai acionar o overlay pq o user não está logado
+        }
+
+        function selecionarModalidade(mod) {
+            localStorage.setItem('mg_selected_modality', mod);
+            const matSel = document.getElementById('matModalidade');
+            if (matSel) matSel.value = mod;
+            mostrarPagina('matricula');
+
+            // Se já estiver logado, preenche email
+            if (isUserLogged && currentUserEmail) {
+                document.getElementById('matEmail').value = currentUserEmail;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
