@@ -5,7 +5,8 @@ node_modules/
 .idea/
 .vscode/
 *.log
-*.sql
+.sql
+!usuarios.sql
 *.sqlite
 .DS_Store
 uploads/
